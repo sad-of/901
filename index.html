@@ -54,14 +54,13 @@
       font-weight: normal;
     }
 
-    /* حاوية المربع المركزي المصغرة - باللون السمائي */
+    /* حاوية المربع المركزي المصغرة */
     .jailbreak-control-panel {
-      background: rgba(135, 206, 235, 0.85); /* لون سمائي شفاف مريح للعين */
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.5);
       width: 85%;
       max-width: 300px;
       display: flex;
@@ -81,7 +80,7 @@
     #kernel-options label {
       cursor: pointer;
       padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.8);
+      background: #f0f0f0;
       border-radius: 6px;
       border: 2px solid transparent;
       font-size: 13px;
@@ -126,8 +125,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #1a252f;
-      font-weight: 600;
     }
 
     #autoJbInput {
@@ -167,7 +164,7 @@
     <h3 id="UA">Running on:</h3>
   </header>
 
-  <!-- المربع المركزي (السمائي) -->
+  <!-- المربع المركزي -->
   <main class="jailbreak-control-panel">
     
     <div class="btn-container">
@@ -175,7 +172,7 @@
         <input type="radio" name="kernel" id="netctrl-exploit" value="netctrl">
         <label for="netctrl-exploit">NetCtrl</label>
         
-        <!-- محدّد افتراضياً -->
+        <!-- تم تحديد Lapse افتراضياً بحاصية checked -->
         <input type="radio" name="kernel" id="lapse-exploit" value="lapse" checked>
         <label for="lapse-exploit">Lapse</label>
       </form>
