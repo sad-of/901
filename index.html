@@ -24,7 +24,7 @@
       color: #333;
     }
 
-    /* صندوق الأرقام (أعلى اليمين) */
+    /* صندوق الأرقام ومعلومات الجهاز (أعلى اليمين) */
     .store-header {
       position: absolute;
       top: 15px;
@@ -130,6 +130,43 @@
       font-size: 13px;
     }
 
+    /* مربعات إحصائيات GoldHEN (نجاح / فشل) */
+    .stats-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .stat-box {
+      flex: 1;
+      padding: 6px 4px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-box.pass {
+      background-color: #28a745; /* مربع أخضر للنجاح */
+      border: 1px solid #1e7e34;
+    }
+
+    .stat-box.fail {
+      background-color: #dc3545; /* مربع أحمر للفشل */
+      border: 1px solid #bd2130;
+    }
+
+    .stat-box .count {
+      font-size: 14px;
+    }
+
     /* تنسيق كونسول النتائج المصغر */
     #console {
       background-color: rgba(0, 0, 0, 0.85);
@@ -176,6 +213,18 @@
       <label for="autoJbInput" id="autoJbLabel">Auto Jailbreak</label>
     </div>
 
+    <!-- مربع إحصائيات النجاح والفشل لـ GoldHEN -->
+    <div class="stats-container">
+      <div class="stat-box pass">
+        <span>Pass (نجاح)</span>
+        <span id="passCounter" class="count">0</span>
+      </div>
+      <div class="stat-box fail">
+        <span>Fail (فشل)</span>
+        <span id="failCounter" class="count">0</span>
+      </div>
+    </div>
+
     <!-- الكونسول -->
     <pre id="console">Ready. Awaiting execution...</pre>
 
@@ -191,6 +240,34 @@
       const jeilbrekBtn = document.getElementById('jeilbrek');
       const consoleElem = document.getElementById('console');
       
+      const passElem = document.getElementById('passCounter');
+      const failElem = document.getElementById('failCounter');
+
+      // استرجاع الإحصائيات من الذاكرة المحلية (localStorage)
+      let passCount = parseInt(localStorage.getItem('goldhen_pass') || '0');
+      let failCount = parseInt(localStorage.getItem('goldhen_fail') || '0');
+
+      function updateStatsUI() {
+        passElem.textContent = passCount;
+        failElem.textContent = failCount;
+      }
+
+      // توفير دوال عامة لاستدعائها عند النجاح أو الفشل من السكربتات الخارجيّة
+      window.addGoldHenPass = function() {
+        passCount++;
+        localStorage.setItem('goldhen_pass', passCount);
+        updateStatsUI();
+      };
+
+      window.addGoldHenFail = function() {
+        failCount++;
+        localStorage.setItem('goldhen_fail', failCount);
+        updateStatsUI();
+      };
+
+      // تهيئة عرض العدادات لأول مرة
+      updateStatsUI();
+
       let timer = null;
       let countdown = 5;
 
