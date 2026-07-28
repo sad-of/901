@@ -192,7 +192,7 @@
       const consoleElem = document.getElementById('console');
       
       let timer = null;
-      let countdown = 8; // تم التعديل إلى 8 ثوانٍ
+      let countdown = 5;
 
       function printConsole(text) {
         consoleElem.textContent += '\n' + text;
@@ -207,7 +207,7 @@
           return;
         }
 
-        countdown = 8; // تم التعديل إلى 8 ثوانٍ
+        countdown = 5;
         printConsole(`[*] Auto Jailbreak active. Triggering in ${countdown}s...`);
 
         timer = setInterval(() => {
