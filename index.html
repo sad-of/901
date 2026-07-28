@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" manifest="cache.manifest">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jailbreak</title>
+  
+  <style>
+    /* تنسيقات عامة للجسم (Body) */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('includes/cat.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    /* صندوق الأرقام (أعلى اليمين) */
+    .store-header {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(178, 235, 242, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 4px 8px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      border: 1px solid rgba(178, 235, 242, 0.5);
+      text-align: right;
+      z-index: 100;
+    }
+
+    .store-header h3#UA {
+      margin: 0;
+      font-size: 9px;
+      color: #555;
+      font-weight: normal;
+    }
+
+    /* حاوية المربع المركزي المصغرة */
+    .jailbreak-control-panel {
+      background: rgba(224, 247, 250, 0.9);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(178, 235, 242, 0.5);
+      width: 85%;
+      max-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* تنسيق أزرار الراديو */
+    #kernel-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    #kernel-options label {
+      cursor: pointer;
+      padding: 6px 12px;
+      background: #b2ebf2;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    #kernel-options input[type="radio"]:checked + label {
+      background: #d4edda;
+      border-color: #28a745;
+      font-weight: bold;
+    }
+
+    #kernel-options input[type="radio"] {
+      display: none;
+    }
+
+    /* زر Jailbreak الرئيسي */
+    #jeilbrek {
+      background-color: #c0392b;
+      color: #e0f7fa;
+      border: none;
+      padding: 10px 15px;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.1s;
+      width: 100%;
+      box-shadow: 0 3px 8px rgba(192, 57, 43, 0.3);
+    }
+
+    #jeilbrek:hover {
+      background-color: #e74c3c;
+    }
+
+    #jeilbrek:active {
+      transform: translateY(2px);
+    }
+
+    /* قسم التفعيل التلقائي */
+    .autoJb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #autoJbInput {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    #autoJbLabel {
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* تنسيق كونسول النتائج المصغر */
+    #console {
+      background-color: rgba(0, 0, 0, 0.85);
+      color: #00ff00;
+      padding: 10px;
+      border-radius: 6px;
+      width: 100%;
+      height: 90px;
+      overflow-y: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      white-space: pre-wrap;
+      box-sizing: border-box;
+      text-align: left;
+      direction: ltr;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- صندوق الأرقام (أعلى اليمين) -->
+  <header class="store-header">
+    <h3 id="UA">Running on:</h3>
+  </header>
+
+  <!-- المربع المركزي -->
+  <main class="jailbreak-control-panel">
+    
+    <div class="btn-container">
+      <form id="kernel-options">
+        <input type="radio" name="kernel" id="netctrl-exploit" value="netctrl">
+        <label for="netctrl-exploit">NetCtrl</label>
+        
+        <!-- تم تحديد Lapse افتراضياً بحاصية checked -->
+        <input type="radio" name="kernel" id="lapse-exploit" value="lapse" checked>
+        <label for="lapse-exploit">Lapse</label>
+      </form>
+    </div>
+
+    <button id="jeilbrek">Jeilbrek</button>
+    
+    <div class="autoJb">
+      <input id="autoJbInput" type="checkbox">
+      <label for="autoJbInput" id="autoJbLabel">Auto Jailbreak</label>
+    </div>
+
+    <!-- الكونسول -->
+    <pre id="console">Ready. Awaiting execution...</pre>
+
+  </main>
+
+  <script src="src/main.js"></script>
+  <script src="includes/script.js"></script>
+
+  <!-- كود الجافاسكربت الخاص بإدارة العداد والتفعيل التلقائي -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const autoJbInput = document.getElementById('autoJbInput');
+      const jeilbrekBtn = document.getElementById('jeilbrek');
+      const consoleElem = document.getElementById('console');
+      
+      let timer = null;
+      let countdown = 5;
+
+      function printConsole(text) {
+        consoleElem.textContent += '\n' + text;
+        consoleElem.scrollTop = consoleElem.scrollHeight;
+      }
+
+      function startAutoJb() {
+        const selectedOption = document.querySelector('input[name="kernel"]:checked');
+        if (!selectedOption) {
+          printConsole('[!] Select a Kernel option first!');
+          autoJbInput.checked = false;
+          return;
+        }
+
+        countdown = 5;
+        printConsole(`[*] Auto Jailbreak active. Triggering in ${countdown}s...`);
+
+        timer = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            printConsole(`[*] Triggering in ${countdown}s...`);
+          } else {
+            clearInterval(timer);
+            timer = null;
+            printConsole('[*] Executing Jailbreak...');
+            jeilbrekBtn.click();
+          }
+        }, 1000);
+      }
+
+      function stopAutoJb() {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+          printConsole('[*] Auto Jailbreak cancelled.');
+        }
+      }
+
+      autoJbInput.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          startAutoJb();
+        } else {
+          stopAutoJb();
+        }
+      });
+
+      jeilbrekBtn.addEventListener('click', () => {
+        const selectedOption = document.querySelector('input[name="kernel"]:checked');
+        if (!selectedOption) {
+          printConsole('[!] Error: No Kernel selected.');
+          return;
+        }
+        printConsole(`[*] Running payload (${selectedOption.value})...`);
+      });
+    });
+  </script>
+</body>
+</html>
